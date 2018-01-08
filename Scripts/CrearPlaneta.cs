@@ -10,8 +10,8 @@ public class CrearPlaneta : MonoBehaviour {
 
 	// Use this for initialization
 
-        public void createPlanet()
-        { 
+    public void createPlanet()
+    { 
         if(GameObject.Find("Urth (1)(Clone)") == null)
         Instantiate(urthToCreate,new Vector3(posToCreate.transform.position.x, posToCreate.transform.position.y, posToCreate.transform.position.z),Quaternion.identity,canvas.transform);
   

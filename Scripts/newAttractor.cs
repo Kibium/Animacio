@@ -46,7 +46,7 @@ public class newAttractor : MonoBehaviour
     void Start()
     {
  
-        Debug.Log(speed.x+ speed.z+ speed.y);
+        //Debug.Log(speed.x+ speed.z+ speed.y);
      
         velocity = new Vec3(speed.x, speed.y, speed.z) * 20;
         position = new Vec3(fx, fy, fz);

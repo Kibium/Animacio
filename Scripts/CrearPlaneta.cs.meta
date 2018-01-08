@@ -1,10 +1,16 @@
 fileFormatVersion: 2
 guid: cd6f086ecfe894a488fd81facd7048f7
-timeCreated: 1513087057
+timeCreated: 1514288994
 licenseType: Free
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - urthToCreate: {fileID: 114098186277038306, guid: 1727067677d863a4f8fd94c7532e1927,
+      type: 2}
+  - posToCreate: {fileID: 1180479859543088, guid: 1727067677d863a4f8fd94c7532e1927,
+      type: 2}
+  - canvas: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

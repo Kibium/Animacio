@@ -1,10 +1,17 @@
 fileFormatVersion: 2
 guid: 8758d111d85e6ff449aa3308b9a0100f
-timeCreated: 1513534995
+timeCreated: 1514305498
 licenseType: Free
 MonoImporter:
+  externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - g: {instanceID: 0}
+  - cubeslider: {instanceID: 0}
+  - urthToCreate: {fileID: 114098186277038306, guid: 1727067677d863a4f8fd94c7532e1927,
+      type: 2}
+  - posToCreate: {instanceID: 0}
+  - canvas: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

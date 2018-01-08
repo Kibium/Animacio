@@ -129,6 +129,7 @@ public class Vec3
         return new Vec3(a.x * d, a.y * d, a.z * d);
     }
 
+
     public static float Dot(Vec3 lhs, Vec3 rhs)
     {
         return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z;

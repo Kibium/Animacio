@@ -6,106 +6,89 @@ using UnityEngine.UI;
 using UnityEngine;
 
 
-public class Attractor : MonoBehaviour {
+
+public class Attractor : MonoBehaviour
+{
+    [ExecuteInEditMode]
+
+    public static Material m;
 
     LineRenderer forceline;
     int lengthLine = 2;
     //SELF MADE STUFF
-    Vec3 position, velocity, dir, force, inter;
+    public Vec3 position, velocity;
+    Vec3 dir, force, inter;
     public Slider slider;
     public Attractor attractor;
     Vec3 lastpos = Vec3.zero;
-    public float fx,fy,fz;
-    public float  mass, dist;
-    private float delta = 0.33f;
-    public  float bigMass;
-    public static bool vectors = false;
+    Vec3 originalSliderpos, actual;
+    public float fx, fy, fz;
+    public float mass, dist;
+    public static float delta;
+    public float bigMass;
+    float offset;
+    public static int vectors = -1;
     private Vec3 sunPos = Vec3.zero; // posició del sol en el sistema
+    public Transform origin;
+    public static float G = 500f;
 
-	public static float G = 500f;
-	
+    Material lineMat;
 
-	/*public Rigidbody A;
-    public Rigidbody B;
-   // [SerializeField]
-    float distance;
-
-    //[SerializeField]
-    Vector3 direction;
-
-    //[SerializeField]
-     Vector3 GravForce;*/
-
-   // [SerializeField]
+    // [SerializeField]
     public Vector3 speed;
     public Vector3 rotata;
+    Vector3 pos, vforce;
 
     MyQuat q;
-    
 
 
-  void FixedUpdate ()
-     {
+
+    void FixedUpdate()
+    {
         bigMass = Hole.bigMassa;
         if (attractor != null)
         {
-            
+
             Attract(attractor);
 
         }
 
-     }
+    }
 
-     void Start ()
-     {
-        
-        forceline = gameObject.AddComponent<LineRenderer>();
-        forceline.widthMultiplier = 5.5f;
-        forceline.positionCount = lengthLine;
-        forceline.material = new Material(Shader.Find("Particles/Additive"));
- 
+    void Start()
+    {
 
-        /*speedline = gameObject.AddComponent<LineRenderer>();
-        speedline.widthMultiplier = 4.5f;
-        speedline.positionCount = lengthLine;
-        speedline.material = new Material(Shader.Find("Particles/Additive"));
-        speedline.startColor = Color.green;
-        speedline.endColor = Color.green;*/
+        lineMat = m;
 
-
-
+        delta = 0.033f;
+        originalSliderpos = new Vec3(510, 1178, -239);
+        //mod2 = Vec3.Mod(originalSliderpos);
         q = new MyQuat(transform.rotation);
-        velocity = new Vec3(speed.x, speed.y, speed.z)*20;
-        position = new Vec3(fx, fy ,fz);
 
-        //inter = new Vec3(fx-fx / 3, fy-fy / 3, fz-fz / 3);
-        //A.velocity = speed * 50;
-        //velocity = Vec3.backward;
+        //Esta fet aixi degut a que s han d iniialitzar tots els valors, un per un, de les posicions
+        fx = transform.position.x;
+        fy = transform.position.y;
+        fz = transform.position.z;
+
+
+        velocity = new Vec3(speed.x, speed.y, speed.z) * 20;
+        position = new Vec3(fx, fy, fz);
 
     }
 
-   
 
-     void Attract (Attractor objToAttract)
-     {
-       /*direction = A.position - B.position;
-         distance = direction.magnitude;
 
-         if (distance == 0f)
-             return;
+    void Attract(Attractor objToAttract)
+    {
 
-         float forceMagnitude = G * (A.mass * B.mass) / Mathf.Pow(distance, 2);
-        //Debug.Log("Gravity in  RB for: " + name + ": " + forceMagnitude);
+        //----------------SELF MADE NICELY NICE STUFF//------
+        actual = TargetPos.getPos();
+        if (delta >= 0.033f + 0.02 * 14)
+            delta = 0.033f + 0.02f * 14;
+        if (delta <= 0)
+            delta = 0;
 
-         GravForce = direction.normalized * forceMagnitude;
-        Debug.Log("Gravity for RB" + name + " is :" + GravForce);
-        A.transform.Rotate(rotata * Time.deltaTime);
-
-        /* A.AddForce(-GravForce);*/
-
-        //----------------SELF MADE NICELY NICE STUFFY STUFF//------
-
-        position = new Vec3(fx,fy, fz); // Planeta petit
+        position = new Vec3(fx, fy, fz); // Planeta petit
         dir = sunPos - position;
         dist = Vec3.Distance(sunPos, position);
         inter = new Vec3(fx - fx / 3, fy - fy / 3, fz - fz / 3);
@@ -115,41 +98,35 @@ public class Attractor : MonoBehaviour {
         float f = (G * bigMass * mass) / Mathf.Pow(dist, 2);
         Vec3 gravity = Vec3.Normalize(dir) * f;
 
-      
-        velocity.x = velocity.x + slider.value/20 * gravity.x;
-        velocity.y = velocity.y + slider.value / 20 * gravity.y;
-        velocity.z = velocity.z + slider.value / 20 * gravity.z;
+
+        velocity.x = velocity.x + delta / 20 * gravity.x;
+        velocity.y = velocity.y + delta / 20 * gravity.y;
+        velocity.z = velocity.z + delta / 20 * gravity.z;
 
 
-       // position = position + velocity * Time.deltaTime;
-        fx = fx + velocity.x * slider.value;
-        fy = fy + velocity.y * slider.value;
-        fz = fz+ velocity.z * slider.value;
+        // position = position + velocity * Time.deltaTime;
+        fx = fx + velocity.x * delta;
+        fy = fy + velocity.y * delta;
+        fz = fz + velocity.z * delta;
 
-        q.y += 2 * Time.deltaTime;
+        q.y += 1 * Mathf.Rad2Deg;
 
         transform.position = new Vector3(position.x, position.y, position.z);
         transform.rotation = new Quaternion(q.x, q.y, q.z, q.w);
 
-        Vector3 pos = new Vector3(position.x, position.y, position.z);
-        Vector3 force = new Vector3(fx, fy, fz);
+        pos = new Vector3(position.x, position.y, position.z);
+        vforce = new Vector3(fx, fy, fz);
         Vector3 intt = new Vector3(inter.x, inter.y, inter.z);
 
-        forceline.startColor = Color.red;
-        forceline.endColor = Color.red;
-
-        forceline.SetPosition(0, pos);
-        forceline.SetPosition(1, force-pos/3); 
-
-        
-
-        //speedline.SetPosition(0, pos);
-        //speedline.SetPosition(1, speed - pos / 3);
-
-
-        //Debug.DrawLine(pos, (force - pos)/10, Color.red);
     }
 
+
+/*
+    public static Vec3 getPos()
+    {
+        return position;
+    }
+    */
 
 }
 
